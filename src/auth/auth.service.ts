@@ -15,32 +15,13 @@ export class AuthService extends PrismaClient implements OnModuleInit {
     this.logger.log('MongoDB connected');
   }
 
-  async login() {
-    console.log('Llega');
-    const saltRounds = 10;
-    const myPlaintextPassword = 's0//P4$$w0rD';
-    try {
-      const salt = bcrypt.genSaltSync(saltRounds);
-      return salt;
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
-
   async registerUser(registerUserDto: RegisterUserDto) {
-    /* const saltRounds = 10;
-    const myPlaintextPassword = 's0//P4$$w0rD';
-
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const hash = bcrypt.hashSync(myPlaintextPassword, salt);
-    return hash; */
     const { email, name, password } = registerUserDto;
 
     try {
       const user = await this.user.findUnique({
         where: {
-          email: email,
+          email,
         },
       });
 
@@ -53,9 +34,9 @@ export class AuthService extends PrismaClient implements OnModuleInit {
 
       const newUser = await this.user.create({
         data: {
-          email: email,
-          password, //: bcrypt.hashSync(password, 10), // TODO: encriptar / hash
-          name: name,
+          email,
+          password: bcrypt.hashSync(password, 10),
+          name,
         },
       });
 

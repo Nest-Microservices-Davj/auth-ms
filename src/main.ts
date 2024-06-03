@@ -7,9 +7,15 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const logger = new Logger('Auth-MS');
 
-  const app = await NestFactory.create(AppModule, {
-    rawBody: true,
-  });
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.NATS,
+      options: {
+        servers: envs.natsServers,
+      },
+    },
+  );
 
   logger.log(`Auth Microservice running on port ${envs.port}`);
 
@@ -20,19 +26,6 @@ async function bootstrap() {
     }),
   );
 
-  // {inheritAppConfig: true} is the property to use the PipeValidation as MS and HTTP application
-  app.connectMicroservice<MicroserviceOptions>(
-    {
-      transport: Transport.NATS,
-      options: {
-        servers: envs.natsServers,
-      },
-    },
-    { inheritAppConfig: true },
-  );
-
-  await app.startAllMicroservices();
-
-  await app.listen(envs.port);
+  await app.listen();
 }
 bootstrap();
