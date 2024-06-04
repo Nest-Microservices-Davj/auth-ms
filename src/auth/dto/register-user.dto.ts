@@ -1,14 +1,7 @@
-import { IsEmail, IsString, IsStrongPassword } from 'class-validator';
+import { IsString } from 'class-validator';
+import { LoginUserDto } from './login-user.dto';
 
-export class RegisterUserDto {
+export class RegisterUserDto extends LoginUserDto {
   @IsString()
   name: string;
-
-  @IsString()
-  @IsEmail()
-  email: string;
-
-  @IsString()
-  @IsStrongPassword()
-  password: string;
 }

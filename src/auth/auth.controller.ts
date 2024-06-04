@@ -1,9 +1,8 @@
-import { Controller, Logger, Post } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { RegisterUserDto } from './dto/register-user.dto';
-//import { LoginUserDto } from './dto';
-import * as bcrypt from 'bcrypt';
+import { LoginUserDto } from './dto';
 
 @Controller()
 export class AuthController {
@@ -16,13 +15,12 @@ export class AuthController {
   }
 
   @MessagePattern('auth.login.user')
-  loginUser() {
-    //return this.authService.login();
+  loginUser(@Payload() loginUserDto: LoginUserDto) {
+    return this.authService.loginUser(loginUserDto);
   }
 
   @MessagePattern('auth.verify.user')
-  verifyToken() {
-    this.logger.log('Verify user');
-    return 'verify User';
+  verifyToken(@Payload() token: string) {
+    return this.authService.verifyToken(token);
   }
 }
