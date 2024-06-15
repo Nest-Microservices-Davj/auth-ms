@@ -17,4 +17,4 @@ steps:
         "us-east1-docker.pkg.dev/microservices-426101/image-registry/auth-ms-prod",
       ]
 options:
-  logging: GCS_ONLY
+  logging: CLOUD_LOGGING_ONLY
